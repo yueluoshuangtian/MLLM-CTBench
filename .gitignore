@@ -1,0 +1,45 @@
+# ===== data (download separately from HuggingFace, do NOT commit) =====
+data/reasoning_train/
+data/reasoning_test/
+data/images/
+data/img.zip
+*.zip
+
+# ===== model checkpoints / training outputs (benchmark repo ships code only) =====
+checkpoints/
+**/checkpoints/
+output/
+outputs/
+grpo_cl_output/
+sft+grpo_cl_output/
+*-sft/
+*_lora/
+predictions/
+predictions_v2/
+last_predictions*/
+infer_answers/
+*.safetensors
+*.bin
+
+# ===== logs / debug / experiment tracking =====
+*.log
+nohup.out
+*.out
+debug_log*.txt
+debug_log_*.txt
+wandb/
+_worker_diag*
+keepalive*
+rollout_log*
+
+# ===== python =====
+__pycache__/
+*.pyc
+*.egg-info/
+.ipynb_checkpoints/
+
+# ===== editor / misc =====
+.lh/
+.sixth/
+.env
+*.png

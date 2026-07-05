@@ -1,0 +1,5 @@
+datasets:
+  - json_path: /mnt/train_data/xjdu/MAPLM-V2/maplm_v0.1/filtered_problems_train.json
+    sampling_strategy: all
+  - json_path: /mnt/train_data/xjdu/MAPLM-V2/maplm_v0.1/filtered_problems_val.json
+    sampling_strategy: all

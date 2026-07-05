@@ -1,0 +1,16 @@
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl.sh base 0 seqft
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl.sh base 0 seqftback
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl_replay.sh replay 0.05 seqft
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl_replay.sh replay 0.05 seqftback
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl_replay.sh replay_fixed 0.05 seqft
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl_replay.sh replay_fixed 0.05 seqftback
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl_replay.sh replay 0.1 seqft
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl_replay.sh replay 0.1 seqftback
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl_replay.sh replay_fixed 0.1 seqft
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl_replay.sh replay_fixed 0.1 seqftback
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl_replay.sh replay 0.15 seqft
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl_replay.sh replay 0.15 seqftback
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl_replay.sh replay_fixed 0.15 seqft
+# bash /home/houzhiyan/qwen/src/scripts_cl/cl_replay.sh replay_fixed 0.15 seqftback
+CUDA_VISIBLE_DEVICES=0,1,4,5,6,7 bash /home/houzhiyan/qwen/src/scripts_cl/lora_sft_cl.sh  base 0 seqft
+CUDA_VISIBLE_DEVICES=0,1,4,5,6,7 bash /home/houzhiyan/qwen/src/scripts_cl/lora_sft_cl.sh  base 0 seqftback

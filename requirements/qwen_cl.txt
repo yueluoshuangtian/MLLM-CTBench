@@ -1,0 +1,19 @@
+# Qwen2.5-VL 持续学习 + RFT(GRPO)/Joint 环境 (env: qwen_cl, python 3.10)
+# torch 需 CUDA12.x 轮子(cu124)。GRPO 依赖 trl + open-r1-multimodal(在 qwen_cl/src 内)。
+# 安装顺序:
+#   conda create -n qwen_cl python=3.10 && conda activate qwen_cl
+#   pip install torch==2.5.1 torchvision==0.20.1 --index-url https://download.pytorch.org/whl/cu124
+#   pip install -r requirements/qwen_cl.txt
+#   pip install -e qwen_cl/src/open-r1-multimodal   # trl/GRPO 训练器
+#   pip install flash-attn==2.6.* --no-build-isolation
+torch==2.5.1
+torchvision==0.20.1
+transformers==4.49.0
+trl==0.16.0
+accelerate==1.13.0
+peft==0.19.1
+deepspeed==0.15.4
+datasets==5.0.0
+qwen-vl-utils==0.0.14
+numpy==2.2.6
+pillow==12.2.0

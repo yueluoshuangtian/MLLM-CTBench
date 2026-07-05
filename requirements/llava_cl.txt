@@ -1,0 +1,19 @@
+# LLaVA-1.5 持续学习环境 (env: clmm, python 3.10)
+# torch 需 CUDA11.8 轮子；其余用本仓库 llava_cl/pyproject.toml (pip install -e llava_cl) 安装。
+# 关键 pin（与论文实验一致）：
+# 安装顺序:
+#   conda create -n clmm python=3.10 && conda activate clmm
+#   pip install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu118
+#   pip install -e "llava_cl[train]"
+#   pip install flash-attn==2.5.* --no-build-isolation
+torch==2.1.2
+torchvision==0.16.2
+transformers==4.31.0
+tokenizers==0.13.3
+accelerate==0.21.0
+peft==0.4.0
+deepspeed==0.10.3
+bitsandbytes==0.41.0
+sentencepiece==0.1.99
+numpy==1.26.4
+pillow==10.4.0

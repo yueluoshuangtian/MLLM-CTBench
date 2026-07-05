@@ -1,0 +1,8 @@
+# CoT 过程级质量评测环境（调用 OpenAI 兼容评估器服务；轻量）
+# 评估器本体用 vLLM/sglang 起服务，见 eval/cot_quality/README。
+openai>=1.40
+numpy>=1.26
+scipy>=1.11
+pillow>=10.0
+# 可选：三方一致性统计
+krippendorff>=0.6
