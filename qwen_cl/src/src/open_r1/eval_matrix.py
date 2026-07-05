@@ -93,7 +93,10 @@ def main():
     parser.add_argument("root", help="The per-method run dir (parent of <k>-sft/, predictions/, last_predictions/).")
     parser.add_argument("--order", default="order3", help="task order name (default: order3)")
     parser.add_argument("--test_root", default="/mnt/cxzx/share/workspace/data_transfer/houzhiyan/TMM/qwen data/test")
-    parser.add_argument("--eval_tool", default="/mnt/cxzx/share/workspace/data_transfer/houzhiyan/TMM/qwen data/new_eval_tool")
+    parser.add_argument("--eval_tool", default=os.environ.get(
+        "QWEN_EVAL_TOOL",
+        os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                     "../../../../eval/accuracy/qwen_new_eval_tool")))
     args = parser.parse_args()
 
     root = args.root.rstrip("/")

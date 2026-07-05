@@ -81,9 +81,14 @@ bash llava_cl/scripts/ewc_seq_mas_seqback.sh                  # 见 llava_cl/REA
 # 重新推理（写完 <answer>，供评测）
 python qwen_cl/reinfer.py --method_root $OUTPUT_ROOT/qwen_cl/order3/none_tr1.0
 
-# (a) 最终答案准确率（AA/BWT 矩阵）
-python eval/accuracy/reeval_clmm.py            # LLaVA
-python qwen_cl/src/src/open_r1/eval_matrix.py  # Qwen
+# (a) 最终答案准确率（AA/BWT 矩阵）—— 两个 backbone 输出格式不同，评测各用各的：
+#  · Qwen：模型输出含 <think>…</think><answer>…</answer>，需先剥离 <think> 与多余符号，
+#    由 new_eval_tool 的 eval_results(is_reasoning=True) 完成（_strip_think + 标点归一化）。
+python qwen_cl/src/src/open_r1/eval_matrix.py --root $OUTPUT_ROOT/qwen_cl/order3 \
+       --eval_tool eval/accuracy/qwen_new_eval_tool           # Qwen（--eval_tool 默认已指向仓库自带）
+#  · LLaVA：用其自带的逐任务评测器（抽 <answer> + 各任务 exact/ROUGE-L）。
+python eval/accuracy/reeval_clmm.py                            # LLaVA（简化重评，抠 <answer> 按任务匹配）
+# 逐任务评测器：LLaVA 在 llava_cl/eval_tool/evaluate_*.py；Qwen 在 eval/accuracy/qwen_new_eval_tool/
 
 # (b) CoT 过程级质量（三维度 logic/grounding/knowledge + Forget/AP/BWT）
 #     先起评估器服务（vLLM/sglang，OpenAI 兼容），再打分聚合

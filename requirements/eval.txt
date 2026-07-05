@@ -6,3 +6,4 @@ scipy>=1.11
 pillow>=10.0
 # 可选：三方一致性统计
 krippendorff>=0.6
+rouge>=1.0    # Qwen ROUGE-L 评测(eval/eval.py)

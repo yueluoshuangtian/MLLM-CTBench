@@ -17,3 +17,4 @@ datasets==5.0.0
 qwen-vl-utils==0.0.14
 numpy==2.2.6
 pillow==12.2.0
+rouge
