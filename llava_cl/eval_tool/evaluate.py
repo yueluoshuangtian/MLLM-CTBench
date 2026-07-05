@@ -5,8 +5,8 @@ from process_json import save_loads_json
 from process_json_to_use import process_use
 from evaluate_art_long_sentences import evaluate_average_rouge_l
 from evaluate_math import reverse_answer_CoT
-commaStrip= re.compile("(\d)(\,)(\d)")
-periodStrip= re.compile("(?!<=\d)(\.)(?!\d)")
+commaStrip= re.compile(r"(\d)(\,)(\d)")
+periodStrip= re.compile(r"(?!<=\d)(\.)(?!\d)")
 punct= [';', r"/", '[', ']', '"', '{', '}','(', ')', '=', '+', '\\', '_', '-','>', '<', '@', '`', ',', '?', '!']
 manualMap= { 'none': '0','zero': '0','one': '1','two': '2','three': '3','four': '4','five': '5',
 							  'six': '6','seven': '7','eight': '8','nine': '9','ten': '10'}

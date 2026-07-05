@@ -52,8 +52,8 @@ class VQAEval:
 							]
 
 
-		self.periodStrip  = re.compile("(?!<=\d)(\.)(?!\d)")
-		self.commaStrip   = re.compile("(\d)(\,)(\d)")
+		self.periodStrip  = re.compile(r"(?!<=\d)(\.)(?!\d)")
+		self.commaStrip   = re.compile(r"(\d)(\,)(\d)")
 		self.punct        = [';', r"/", '[', ']', '"', '{', '}',
 							 '(', ')', '=', '+', '\\', '_', '-',
 							 '>', '<', '@', '`', ',', '?', '!']
