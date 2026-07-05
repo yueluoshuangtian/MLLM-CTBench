@@ -50,27 +50,20 @@ def _subsample_list(data_list: list, ratio: float, seed: int, key: str):
 
 @dataclass
 class DataArguments:
-    #用于训练的数据的位置
-    data_dir: Optional[str] = field(default="/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/llava_train",
+    # 训练数据目录（LLaVA conversations 格式，由 scripts/convert_qwen_to_llava.py 生成）；
+    # 默认从环境变量 LLAVA_TRAIN_DIR 读取（配合 configs/paths.env）。
+    data_dir: Optional[str] = field(default=os.environ.get("LLAVA_TRAIN_DIR", "data/llava_train"),
                                     metadata={"help": "Path to the json directory"})
-    # data_dir: Optional[str] = field(default="/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/train_for_test",
-    #                                 metadata={"help": "Path to the json directory"})    
-    replay_replace_data_dir: Optional[str] = field(default="/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/train/changed_questions",
+    replay_replace_data_dir: Optional[str] = field(default=os.environ.get("LLAVA_REPLAY_DIR", "data/llava_train/changed_questions"),
                                     metadata={"help": "Path to the replay json directory"})
-    
-    # data_dir: Optional[str] = field(default="/mnt/cxzx/workspace/data_transfer/houzhiyan/clmm-benchmark/CoIN/Instructions_10Type",
-    #                                 metadata={"help": "Path to the json directory"})   
-    # replay_replace_data_dir: Optional[str] = field(default="/mnt/cxzx/workspace/data_transfer/houzhiyan/clmm-benchmark/CoIN/Instructions_10Type/changed_questions",
-    #                                 metadata={"help": "Path to the replay json directory"})
-    
+
     tasks: Optional[str] = field(default=None,
                                  metadata={"help": "Path to the training data."})
     initial_tasks: Optional[str] = field(default="",
                                          metadata={"help": "Path to the training data."})
     lazy_preprocess: bool = False
     is_multimodal: bool = False
-    image_folder: Optional[str] = field(default="/mnt/cxzx/workspace/data_transfer/houzhiyan/clmm-benchmark")
-    # image_folder: Optional[str] = field(default="/mnt/cxzx/workspace/data_transfer/houzhiyan/clmm-benchmark/CoIN")
+    image_folder: Optional[str] = field(default=os.environ.get("IMAGE_ROOT", "data/images"))
     image_aspect_ratio: str = 'square'
     replay_ratio: float = 0.01
     non_duplicates:bool = True

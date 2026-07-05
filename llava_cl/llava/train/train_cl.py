@@ -61,43 +61,29 @@ import deepspeed
 import sys
 import os
 
-directory_path = "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/new_eval_tool"
-# 注: new_eval_tool 是简化版评分模块, 提供 loose substring 匹配。
-# 论文/原作者评分脚本仍需自行替换以获得严格分数
+# ---- 路径全部从环境变量读取（配合 configs/paths.env）----
+# Qwen 逐任务评分器（含 <think> 剥离 / is_reasoning）：仓库自带 eval/accuracy/qwen_new_eval_tool
+directory_path = os.environ.get(
+    "QWEN_EVAL_TOOL",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                 "../../../eval/accuracy/qwen_new_eval_tool"))
 sys.path.insert(0, directory_path)
 import evaluate_art_long_sentences,evaluate_FOMC,evaluate_math,evaluate_numglue,evaluate_object,evaluate_science,evaluate_medical_long_sentences,evaluate_ocr
 
 local_rank = None
-#question_word
-question_file_dict = {
-    "numglue": "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/llava_eval/numglue.jsonl",
-    "art":     "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/llava_eval/art.jsonl",
-    "math":    "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/llava_eval/math.jsonl",
-    "fomc":    "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/llava_eval/fomc.jsonl",
-    "medical": "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/llava_eval/medical.jsonl",
-    "OCR":     "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/llava_eval/OCR.jsonl",
-    "science": "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/llava_eval/science.jsonl",
-}
-annotation_file_dict = {
-    "numglue": "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/test/numglue.json",
-    "art":     "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/test/art.json",
-    "math":    "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/test/math.json",
-    "fomc":    "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/test/fomc.json",
-    "medical": "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/test/medical.json",
-    "OCR":     "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/test/OCR.json",
-    "science": "/mnt/cxzx/workspace/data_transfer/houzhiyan/qwen_data/test/science.json"
-}
-#question_iamge
-image_folder_dict = {
-    "numglue": "",
-    "art": "/mnt/cxzx/workspace/data_transfer/houzhiyan/clmm-benchmark",
-    "math": "/mnt/cxzx/workspace/data_transfer/houzhiyan/clmm-benchmark",
-    "fomc": "",
-    "medical": "/mnt/cxzx/workspace/data_transfer/houzhiyan/clmm-benchmark",
-    "OCR": "/mnt/cxzx/workspace/data_transfer/houzhiyan/clmm-benchmark",
-    "science": "/mnt/cxzx/workspace/data_transfer/houzhiyan/clmm-benchmark"
-    # "object_relative":"/mnt/cxzx/workspace/data_transfer/houzhiyan/clmm-benchmark"
-} 
+
+# LLaVA CL 数据布局（见 data/README）：
+#   LLAVA_QUESTION_DIR/<task>.jsonl  —— LLaVA 训练/推理问句（{question_id,text,image}），由 convert_qwen_to_llava.py 生成
+#   TEST_DIR/<task>.json             —— 金标（reasoning_test），供逐任务评分
+#   IMAGE_ROOT                        —— img.zip 解压根；纯文本任务(numglue/fomc)置空
+_TASKS = ["numglue", "art", "math", "fomc", "medical", "OCR", "science"]
+_TEXT_ONLY = {"numglue", "fomc"}
+_Q_DIR   = os.environ.get("LLAVA_QUESTION_DIR", "data/llava_eval")
+_ANN_DIR = os.environ.get("TEST_DIR", "data/reasoning_test")
+_IMG     = os.environ.get("IMAGE_ROOT", "data/images")
+question_file_dict   = {t: os.path.join(_Q_DIR, f"{t}.jsonl") for t in _TASKS}
+annotation_file_dict = {t: os.path.join(_ANN_DIR, f"{t}.json") for t in _TASKS}
+image_folder_dict    = {t: ("" if t in _TEXT_ONLY else _IMG) for t in _TASKS}
 
 
 def release_memory():

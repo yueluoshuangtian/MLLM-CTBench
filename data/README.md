@@ -36,6 +36,29 @@ IMAGE_ROOT=<repo>/data/images
 ```
 （默认已指向 `data/` 下，一键脚本下载到位后无需再改。）
 
+## LLaVA 训练所需的数据（格式与 Qwen 不同）
+LLaVA 用 **conversations** 格式训练、用**问句 jsonl** 做逐任务推理,和 Qwen 直接读 `reasoning_*` 不同。
+一键脚本已自动调用转换器生成;也可手动跑:
+```bash
+python llava_cl/scripts/convert_qwen_to_llava.py --src data --out data
+```
+产出:
+```
+data/
+├── llava_train/<task>.json     # 训练 conversations: {id, image?, conversations:[human/gpt]}
+└── llava_eval/<task>.jsonl     # 评测问句(每行): {question_id, text, image?}
+```
+对应 `configs/paths.env` 的 `LLAVA_TRAIN_DIR` / `LLAVA_QUESTION_DIR`(默认已指向 `data/llava_*`)。
+金标仍复用 `reasoning_test`(`TEST_DIR`)。纯文本任务(numglue/fomc)无 image 字段。
+
+## 数据格式对照
+| 用途 | Qwen | LLaVA |
+|---|---|---|
+| 训练 | `reasoning_train/<task>.json`（problem/solution） | `llava_train/<task>.json`（conversations） |
+| 推理问句 | 直接用 reasoning + 模板 | `llava_eval/<task>.jsonl`（question_id/text/image） |
+| 评测金标 | `reasoning_test/<task>.json` | 同左（复用） |
+| 图片 | `images/`（img.zip 解压） | 同左（复用） |
+
 ## 备选：HF datasets 库加载
 仓库同时提供了 HF-datasets 友好的 per-task 配置（字段 question_id/answer/image/…）：
 ```python

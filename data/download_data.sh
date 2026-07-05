@@ -20,8 +20,13 @@ else
   echo "  未找到 img.zip，请检查下载"; exit 1
 fi
 
-echo "[3/3] 校验目录结构 ..."
-for d in reasoning_train reasoning_test images; do
+echo "[3/4] 生成 LLaVA 专用数据 (llava_train conversations + llava_eval 问句) ..."
+# Qwen 直接用 reasoning_train/test；LLaVA 需要 conversations/问句格式，用转换器生成
+python "$HERE/../llava_cl/scripts/convert_qwen_to_llava.py" --src "$HERE" --out "$HERE" || \
+  echo "  (LLaVA 转换失败可跳过；仅 LLaVA 训练需要)"
+
+echo "[4/4] 校验目录结构 ..."
+for d in reasoning_train reasoning_test images llava_train llava_eval; do
   [ -d "$d" ] && echo "  ✓ data/$d ($(find "$d" -maxdepth 1 | wc -l) 项)" || echo "  ✗ 缺少 data/$d"
 done
 echo "完成。若图片根层级与 image 字段不符，请把真正含 art_vqa_datasets/... 的目录设为 IMAGE_ROOT。"
